@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контакти Sympho</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="img/logo.png">
+</head>
+<body>
+    <header>
+        <div class="container header-flex" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
+            <a href="javascript:history.back()" class="back-link">
+                <span>←</span> Назад
+            </a>
+
+            <a href="index.html" class="logo-link">
+                <img src="logo.png" alt="Sympho" class="logo-img">
+            </a>
+
+            <div class="search-container" style="position: relative; display: flex; gap: 5px;">
+    <input type="text" id="searchInput" oninput="liveSearch()" placeholder="Пошук (назва або арт...)" 
+           style="padding: 8px 12px; border-radius: 8px; border: 1px solid #ddd; outline: none; width: 180px;">
+    <button onclick="performSearch()" style="background: #28a745; color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer;">🔍</button>
+
+    <div id="live-results" style="position: absolute; top: 100%; left: 0; right: 0; background: white; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); z-index: 1000; display: none; max-height: 300px; overflow-y: auto;"></div>
+</div>
+            
+            <nav style="display: flex; align-items: center;">
+                <ul>
+                    <li><a href="index.html">Головна</a></li>
+                    <li><a href="siphons.html">Сифони</a></li>
+                    <li><a href="armature.html">Арматура</a></li>
+                    <li><a href="covers.html">Кришки</a></li>
+					<li><a href="household.html">Госп. товари</a></li>
+                    <li><a href="contacts.html" class="active">Контакти</a></li>
+                </ul>
+                <div style="position: relative; margin-left: 15px; display: flex; align-items: center;">
+                    <a href="cart.html" style="text-decoration: none; font-size: 24px;">🛒</a>
+                    <span id="cart-count" style="
+                        position: absolute; 
+                        top: -8px; 
+                        right: -10px; 
+                        background: #ff4d4d; 
+                        color: white; 
+                        border-radius: 50%; 
+                        padding: 2px 6px; 
+                        font-size: 12px; 
+                        font-weight: bold;
+                        display: none;
+                    ">0</span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container content">
+        <h2 style="text-align: center; color: #004a99; margin-bottom: 30px; margin-top: 20px;">Зв'яжіться з нами</h2>
+        
+        <div style="display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; margin-bottom: 50px;">
+            
+            <div style="flex: 1; min-width: 300px; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                <h3 style="color: #004a99;">Наші контакти</h3>
+                <p><strong>📞 Телефон:</strong> <a href="tel:+380989594977" style="text-decoration: none; color: #333;">+38 (098) 959-49-77</a></p>
+                <p><strong>✉️ Email:</strong> <a href="mailto:babelskiy-bies@ukr.net" style="text-decoration: none; color: #333;">babelskiy-bies@ukr.net</a></p>
+                <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+                
+                <h4>Швидка консультація:</h4>
+                <div style="display: flex; gap: 10px;">
+                    <a href="https://t.me/Tarasbabelskyi" target="_blank" class="action-btn tg" style="flex: 1; font-size: 14px; text-align: center; text-decoration: none; color: white; display: block; padding: 10px; border-radius: 8px;">Telegram</a>
+                    <a href="viber://chat?number=%2B380989594977" class="action-btn vb" style="flex: 1; font-size: 14px; padding: 10px; text-align: center; text-decoration: none; color: white; display: block; border-radius: 8px;">Viber</a>
+                </div>
+            </div>
+
+            <div style="flex: 1; min-width: 300px; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                <h3>Напишіть нам:</h3>
+                <form id="contactForm" style="display: flex; flex-direction: column; gap: 15px;">
+                    <input type="text" id="userName" placeholder="Ваше ім'я" required style="padding: 12px; border: 1px solid #ddd; border-radius: 8px; outline: none;">
+                    <input type="tel" id="userPhone" placeholder="Ваш телефон" required style="padding: 12px; border: 1px solid #ddd; border-radius: 8px; outline: none;">
+                    <textarea id="userMsg" placeholder="Який товар вас цікавить?" rows="4" style="padding: 12px; border: 1px solid #ddd; border-radius: 8px; outline: none; resize: none;"></textarea>
+                    
+                    <button class="buy-btn" type="button" onclick="sendMail()" style="width: 100%; font-size: 18px; border: none; cursor: pointer; color: white; padding: 12px; border-radius: 8px;">Відправити повідомлення</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="catalog.js"></script>
+    <script>
+        // ЛОГІКА ПОШУКУ
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (query.length > 0) {
+                window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+            } else {
+                alert("Будь ласка, введіть запит для пошуку");
+            }
+        }
+
+        document.getElementById('searchInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        // ЛОГІКА ФОРМИ
+        function sendMail() {
+            const name = document.getElementById('userName').value;
+            const phone = document.getElementById('userPhone').value;
+            const msg = document.getElementById('userMsg').value;
+
+            if(name === "" || phone === "") {
+                alert("Будь ласка, заповніть ім'я та телефон");
+                return;
+            }
+
+            const myEmail = "babelskiy-bies@ukr.net";
+            const subject = encodeURIComponent("Заявка з сайту Sympho");
+            const body = encodeURIComponent(`Ім'я: ${name}\nТелефон: ${phone}\nПовідомлення: ${msg}`);
+            
+            window.location.href = `mailto:${myEmail}?subject=${subject}&body=${body}`;
+        }
+
+        // Оновлення лічильника при завантаженні (якщо функція не

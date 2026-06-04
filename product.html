@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Sympho — Товар</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="logo.png">
+</head>
+<body>
+    <header>
+        <div class="container header-flex" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
+            <a href="javascript:history.back()" class="back-link">
+                <span>←</span> Назад
+            </a>
+            <a href="index.html" class="logo-link">
+                <img src="logo.png" alt="Sympho" class="logo-img">
+            </a>
+            <nav style="display: flex; align-items: center;">
+                <ul style="margin-right: 20px;">
+                    <li><a href="index.html">Головна</a></li>
+                    <li><a href="siphons.html">Сифони</a></li>
+                    <li><a href="armature.html">Арматура</a></li>
+                    <li><a href="covers.html">Кришки</a></li>
+                    <li><a href="contacts.html">Контакти</a></li>
+                    <li><a href="household.html">Госп. товари</a></li>
+                </ul>
+                <div style="position: relative; display: flex; align-items: center;">
+                    <a href="cart.html" style="text-decoration: none; font-size: 24px;">🛒</a>
+                    <span id="cart-count" style="
+                        position: absolute; 
+                        top: -8px; 
+                        right: -10px; 
+                        background: #ff4d4d; 
+                        color: white; 
+                        border-radius: 50%; 
+                        padding: 2px 6px; 
+                        font-size: 12px; 
+                        font-weight: bold;
+                        display: none;
+                    ">0</span>
+                </div>
+    </header>
+
+    <div class="container content">
+        <div id="product-card" class="product-detail">
+            </div>
+    </div>
+
+    <script src="catalog.js"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const productId = params.get('id');
+        const item = products.find(p => p.id === productId);
+
+        if (item) {
+            const myTelegramUser = "Tarasbabelskyi"; // Татів ТГ
+            const myViberPhone = "380989594977";     // Татів Viber
+            
+            const messageText = `Вітаю! Цікавить ${item.name} (Арт: ${item.article})`;
+            const message = encodeURIComponent(messageText);
+
+            document.getElementById('product-card').innerHTML = `
+                <div style="display:flex; gap:30px; flex-wrap:wrap;">
+                    
+                    <div style="display:flex; gap:15px; flex:1; min-width:320px;">
+                        <div style="display:flex; flex-direction:column; gap:10px;">
+                            ${item.images.map(img => `
+                                <img src="${img}" style="width:70px; height:70px; object-fit:contain; border:1px solid #ddd; cursor:pointer; border-radius:8px;" 
+                                     onclick="document.getElementById('main-pic').src='${img}'" class="thumb-img">
+                            `).join('')}
+                        </div>
+                        <div style="flex:1; background:white; padding:10px; border-radius:15px; border:1px solid #eee; text-align:center;">
+                            <img id="main-pic" src="${item.images[0]}" style="width:100%; max-height:450px; object-fit:contain;">
+                        </div>
+                    </div>
+
+                    <div style="flex:1; min-width:300px;">
+                        <h1 style="color:#004a99; margin-top:0; margin-bottom:5px;">${item.name}</h1>
+                        
+                        <div style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
+                            <p style="background:#eef4fb; color:#004a99; padding:5px 12px; border-radius:6px; font-weight:bold; font-size:14px; margin:0;">
+                                Артикул: ${item.article}
+                            </p>
+                            <button onclick="copyToClipboard('${item.article}')" style="background:#eee; border:none; padding:5px 10px; border-radius:5px; cursor:pointer; font-size:12px; font-weight:600;">
+                                📋 Копіювати
+                            </button>
+                        </div>
+
+                        <p style="font-size:28px; font-weight:bold; color:#28a745; margin-top:10px;">${item.price}</p>
+                        
+                        <div style="margin:20px 0; padding:20px; background:#f8f9fa; border-radius:10px;">
+                            <h4 style="margin-top:0;">Опис:</h4>
+                            <p style="margin-bottom:0;">${item.desc}</p>
+                        </div>
+                        
+                        <a href="https://t.me/${myTelegramUser}?text=${message}" target="_blank" class="action-btn tg">Замовити у Telegram</a>
+                        <a href="viber://chat?number=${myViberPhone}&draft=${message}" class="action-btn vb">Замовити у Viber</a>
+                        <button onclick="addToCart('${item.id}')" style="background: #28a745; color: white; border: none; padding: 14px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 15px;">
+                                🛒 Додати у кошик
+                            </button>
+                    </div>
+                </div>
+            `;
+        } else {
+            document.getElementById('product-card').innerHTML = "<h2>Товар не знайдено</h2>";
+        }
+
+        // Функція для копіювання артикула (рятує, якщо Viber на компі тупить)
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Артикул " + text + " скопійовано!");
+            });
+        }
+    </script>
+
+    <footer>
+        <p style="text-align:center; color:#94a3b8; padding:20px;">&copy; 2026 Sympho. Якість у кожній деталі.</p>
+    </footer>
+</body>
+</html>

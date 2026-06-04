@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Sympho — Сифони</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="logo.png">
+</head>
+<body>
+    <header>
+    <div class="container header-flex" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
+        <a href="javascript:history.back()" class="back-link">
+            <span>←</span> Назад
+        </a>
+
+        <a href="index.html" class="logo-link">
+            <img src="logo.png" alt="Sympho" class="logo-img">
+        </a>
+        
+        <div class="search-container" style="position: relative; display: flex; gap: 5px;">
+    <input type="text" id="searchInput" oninput="liveSearch()" placeholder="Пошук (назва або арт...)" 
+           style="padding: 8px 12px; border-radius: 8px; border: 1px solid #ddd; outline: none; width: 180px;">
+    <button onclick="performSearch()" style="background: #28a745; color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer;">🔍</button>
+
+    <div id="live-results" style="position: absolute; top: 100%; left: 0; right: 0; background: white; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); z-index: 1000; display: none; max-height: 300px; overflow-y: auto;"></div>
+</div>
+
+        <nav style="display: flex; align-items: center;">
+            <ul>
+                <li><a href="index.html">Головна</a></li>
+                <li><a href="siphons.html" class="active">Сифони</a></li>
+                <li><a href="armature.html">Арматура</a></li>
+                <li><a href="covers.html">Кришки</a></li>
+				<li><a href="household.html">Госп. товари</a></li>
+                <li><a href="contacts.html">Контакти</a></li>
+            </ul>
+            <div style="position: relative; margin-left: 15px; display: flex; align-items: center;">
+                <a href="cart.html" style="text-decoration: none; font-size: 24px;">🛒</a>
+                <span id="cart-count" style="
+                    position: absolute; 
+                    top: -8px; 
+                    right: -10px; 
+                    background: #ff4d4d; 
+                    color: white; 
+                    border-radius: 50%; 
+                    padding: 2px 6px; 
+                    font-size: 12px; 
+                    font-weight: bold;
+                    display: none;
+                ">0</span>
+            </div>
+        </nav>
+    </div>
+</header>
+
+    <section class="container content">
+        <h1 style="color: #004a99; margin-bottom: 30px;">Каталог сифонів</h1>
+        <div id="catalog-list" class="product-grid">
+            </div>
+    </section>
+
+    <script src="catalog.js"></script>
+    <script>
+        // ЛОГІКА КАТАЛОГУ
+        const list = document.getElementById('catalog-list');
+        const siphons = products.filter(p => p.category === "siphons");
+
+        siphons.forEach(item => {
+            list.innerHTML += `
+                <div class="product-card">
+                    <img src="${item.images[0]}" alt="${item.name}" style="width:100%; height:180px; object-fit:contain;">
+                    
+                    <p style="color: #888; font-size: 13px; margin: 10px 0 5px 0;">Арт: ${item.article}</p>
+                    
+                    <h3 style="margin-top: 0; font-size: 18px; min-height: 44px; display: flex; align-items: center; justify-content: center; text-align: center;">
+                        ${item.name}
+                    </h3>
+                    
+                    <p class="price" style="margin: 10px 0;">${item.price}</p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                        <a href="product.html?id=${item.id}" class="buy-btn" style="text-decoration:none; display: block;">Детальніше</a>
+                        <button onclick="addToCart('${item.id}')" style="background: #28a745; color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%;">
+                            🛒 У кошик
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+
+        // ЛОГІКА ПОШУКУ
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (query.length > 0) {
+                window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+            } else {
+                alert("Будь ласка, введіть запит для пошуку");
+            }
+        }
+
+        document.getElementById('searchInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+    </script>
+
+    <footer>
+        <p style="text-align: center; color: #94a3b8; padding: 20px;">&copy; 2026 Sympho. Якість у кожній деталі.</p>
+    </footer>
+</body>
+</html>

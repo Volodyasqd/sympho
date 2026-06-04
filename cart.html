@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Sympho — Мій Кошик</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="logo.png">
+</head>
+<body>
+    <header>
+        <div class="container header-flex" style="display: flex; align-items: center; justify-content: space-between;">
+            <a href="javascript:history.back()" class="back-link"><span>←</span> Назад</a>
+            <a href="index.html" class="logo-link"><img src="logo.png" alt="Sympho" class="logo-img"></a>
+            <nav>
+			 <ul><li><a href="index.html">Головна</a></li>
+                 <li><a href="siphons.html">Сифони</a></li>
+                 <li><a href="armature.html">Арматура</a></li>
+                 <li><a href="covers.html">Кришки</a></li>
+			     <li><a href="household.html">Госп. товари</a></li>
+                 <li><a href="contacts.html">Контакти</a></li>
+			 </ul>
+			</nav>
+			
+        </div>
+    </header>
+
+    <section class="container content" style="margin-top: 30px;">
+        <h1 style="color: #004a99;">Ваше замовлення</h1>
+        
+        <div id="cart-content" style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 20px; overflow-x: auto;">
+            </div>
+
+        <div id="cart-actions" style="margin-top: 30px; display: none; gap: 15px; flex-wrap: wrap;">
+            <button onclick="sendBulkOrder('tg')" class="action-btn tg" style="padding: 15px 25px; border: none; border-radius: 10px; color: white; cursor: pointer; font-weight: bold; background: #0088cc;">Замовити все в Telegram</button>
+            <button onclick="sendBulkOrder('vb')" class="action-btn vb" style="padding: 15px 25px; border: none; border-radius: 10px; color: white; cursor: pointer; font-weight: bold; background: #7360f2;">Замовити все у Viber</button>
+            <button onclick="clearSymphoCart()" style="background: #ffeded; color: #ff4d4d; border: none; padding: 15px 25px; border-radius: 10px; cursor: pointer; font-weight: bold;">Очистити все</button>
+        </div>
+    </section>
+
+    <script src="catalog.js"></script>
+    <script>
+        function displayCart() {
+            const cart = JSON.parse(localStorage.getItem('sympho_cart')) || [];
+            const container = document.getElementById('cart-content');
+            const actions = document.getElementById('cart-actions');
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align:center; padding: 20px;">
+                        <p style="font-size: 18px; color: #666;">Кошик порожній. Оберіть щось у каталозі.</p>
+                        <a href="index.html" class="buy-btn" style="display:inline-block; margin-top:15px; text-decoration:none;">До каталогу</a>
+                    </div>`;
+                actions.style.display = 'none';
+                return;
+            }
+
+            actions.style.display = 'flex';
+            let html = '<table style="width: 100%; border-collapse: collapse; min-width: 600px;">';
+            html += '<tr style="border-bottom: 2px solid #eee; text-align: left;">' +
+                    '<th style="padding: 10px;">Товар</th>' +
+                    '<th style="padding: 10px;">Артикул</th>' +
+                    '<th style="padding: 10px;">К-сть</th>' +
+                    '<th style="padding: 10px;">Ціна</th>' +
+                    '<th style="padding: 10px; text-align:center;">Дія</th></tr>';
+            
+            cart.forEach(item => {
+                html += `
+                    <tr style="border-bottom: 1px solid #f9f9f9;">
+                        <td style="padding: 15px 10px;">${item.name}</td>
+                        <td style="padding: 15px 10px; color: #888;">${item.article}</td>
+                        <td style="padding: 15px 10px; font-weight: bold;">${item.count} шт.</td>
+                        <td style="padding: 15px 10px; color: #28a745; font-weight: bold;">${item.price}</td>
+                        <td style="padding: 15px 10px; text-align:center;">
+                            <button onclick="removeItem('${item.id}')" style="background:none; border:none; cursor:pointer; font-size: 18px;" title="Видалити">🗑️</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            html += '</table>';
+            container.innerHTML = html;
+        }
+
+        // Видалення одного товару
+        function removeItem(id) {
+            let cart = JSON.parse(localStorage.getItem('sympho_cart')) || [];
+            cart = cart.filter(item => item.id !== id);
+            localStorage.setItem('sympho_cart', JSON.stringify(cart));
+            displayCart();
+            // Оновлюємо лічильник, якщо функція доступна
+            if (typeof updateCartCounter === "function") {
+                updateCartCounter();
+            }
+        }
+
+        // Очищення всього кошика
+        function clearSymphoCart() {
+            if(confirm("Ви впевнені, що хочете очистити кошик?")) {
+                localStorage.removeItem('sympho_cart');
+                displayCart();
+                if (typeof updateCartCounter === "function") {
+                    updateCartCounter();
+                }
+            }
+        }
+
+        // Відправка замовлення одним повідомленням
+        function sendBulkOrder(type) {
+            const cart = JSON.parse(localStorage.getItem('sympho_cart')) || [];
+            if (cart.length === 0) return;
+
+            let orderText = "Нове замовлення Sympho:\n\n";
+            
+            cart.forEach((item, index) => {
+                orderText += `${index + 1}. ${item.name}\n   Арт: ${item.article} — ${item.count} шт. (${item.price})\n\n`;
+            });
+
+            const encodedMsg = encodeURIComponent(orderText);
+            const phone = "380989594977";
+
+            if (type === 'tg') {
+                window.location.href = `https://t.me/Tarasbabelskyi?text=${encodedMsg}`;
+            } else if (type === 'vb') {
+                // Для мобільних пристроїв Viber використовує такий формат
+                window.location.href = `viber://chat?number=${phone}&draft=${encodedMsg}`;
+            }
+        }
+
+        // Ініціалізація при завантаженні
+        window.onload = displayCart;
+    </script>
+</body>
+</html>

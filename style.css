@@ -1,0 +1,253 @@
+/* --- 1. Базові налаштування (Притискаємо футер до низу) --- */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f8fafc;
+    color: #334155;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    width: 95%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* --- 2. Шапка (Header) - Магія центрування --- */
+header {
+    background: #004a99;
+    color: white;
+    padding: 10px 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    flex-shrink: 0;
+}
+
+/* Контейнер для вирівнювання: Назад | Лого | Меню */
+.header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 60px;
+}
+
+/* Ліва частина: Кнопка Назад */
+.back-link {
+    flex: 1; /* Займає 1 частину простору зліва */
+    color: white !important;
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.3s;
+}
+
+.back-link:hover {
+    opacity: 0.8;
+    transform: translateX(-3px);
+}
+
+/* Центральна частина: Логотип */
+.logo-link {
+    flex: 0; /* Не розтягується, фіксований центр */
+    display: flex;
+    justify-content: center;
+    transition: 0.3s;
+}
+
+.logo-img {
+    height: 50px;
+    width: auto;
+    display: block;
+}
+
+.logo-link:hover {
+    transform: scale(1.05);
+}
+
+/* Права частина: Навігація */
+nav {
+    flex: 1; /* Займає 1 частину простору справа */
+    display: flex;
+    justify-content: flex-end;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 18px;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    transition: 0.3s;
+    padding-bottom: 4px;
+}
+
+nav ul li a:hover, nav ul li a.active {
+    border-bottom: 2px solid white;
+}
+
+/* --- 3. Головний контент --- */
+.content {
+    flex: 1 0 auto; /* Розтягується, щоб футер був знизу */
+    padding: 40px 0;
+}
+
+.hero-home {
+    background: #eef4fb;
+    padding: 50px 0;
+    text-align: center;
+    border-bottom: 1px solid #e2e8f0;
+    margin-bottom: 30px;
+}
+
+/* Категорії на Головній */
+.categories {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+.cat-card {
+    background: white;
+    padding: 25px;
+    width: 300px;
+    text-align: center;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    transition: 0.3s ease;
+    border: 1px solid #f1f5f9;
+}
+
+.cat-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+}
+
+.cat-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: contain;
+    margin-bottom: 15px;
+}
+
+/* --- 4. Каталог та Товари --- */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 30px;
+}
+
+.product-card {
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    text-align: center;
+    border: 1px solid #f1f5f9;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: 0.3s;
+}
+
+.product-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: contain;
+}
+
+.price {
+    font-size: 24px;
+    font-weight: 700;
+    color: #16a34a; /* Зелений колір */
+    margin: 10px 0;
+}
+
+.buy-btn {
+    display: block;
+    background: #004a99;
+    color: white;
+    padding: 12px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    text-align: center;
+    transition: 0.3s;
+}
+
+.buy-btn:hover {
+    background: #003366;
+}
+
+/* --- 5. Галерея (Слайдер) у товарі --- */
+.thumb-img {
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: 0.3s;
+}
+
+.thumb-img:hover {
+    border-color: #004a99;
+    transform: scale(1.05);
+}
+
+.action-btn {
+    display: block;
+    text-align: center;
+    padding: 16px;
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    border-radius: 12px;
+    margin-top: 10px;
+    transition: 0.3s;
+}
+
+.tg { background-color: #0088cc; }
+.vb { background-color: #7360f2; }
+
+/* --- 6. Футер --- */
+footer {
+    background: #1e293b;
+    color: #94a3b8;
+    text-align: center;
+    padding: 30px 0;
+    flex-shrink: 0;
+    margin-top: auto;
+}
+
+/* --- 7. Адаптивність (Для телефонів) --- */
+@media (max-width: 900px) {
+    .header-flex {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px 0;
+    }
+    
+    .back-link, nav {
+        justify-content: center;
+        width: 100%;
+    }
+
+    nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .back-link span { font-size: 20px; }
+    .back-link { font-size: 0; } /* На малих екранах лишаємо тільки стрілку */
+}
